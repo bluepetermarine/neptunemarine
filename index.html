@@ -74,6 +74,11 @@
   .note strong{color:var(--navy)}
   .deftable{display:grid;gap:8px;background:#eef4f8;border:1px solid #d4e2ec;border-radius:8px;padding:12px 14px;font-size:13.5px;line-height:1.45}
   .deftable .tt{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#fff;background:var(--navy);border-radius:4px;padding:1px 8px;margin-right:6px;font-size:13px}
+  .gloss{display:grid;grid-template-columns:1fr 1fr;gap:0 30px;margin-top:4px}
+  .gloss .sub2{grid-column:1/-1;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;color:var(--accent);text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e7e2d7;padding-bottom:4px;margin:12px 0 4px}
+  .gloss .g{padding:7px 0;border-bottom:1px solid #eef0ee;font-size:13.5px;line-height:1.4}
+  .gloss .g b{font-family:'JetBrains Mono',monospace;color:var(--navy);font-weight:700;margin-right:2px}
+  .gloss .g .u{color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace}
 
   /* Checklist rows */
   .item{display:grid;grid-template-columns:64px 1fr 150px;gap:14px;padding:12px 4px;border-bottom:1px solid #eef0ee;align-items:start}
@@ -103,6 +108,7 @@
 
   @media (max-width:720px){
     .grid{grid-template-columns:1fr 1fr}
+    .gloss{grid-template-columns:1fr}
     .item{grid-template-columns:52px 1fr;grid-template-areas:"c r" "n n" "ctl ctl"}
     .item .clause{grid-area:c}.item .req{grid-area:r}.item .ctl{grid-area:ctl;align-items:flex-start}
   }
@@ -202,7 +208,7 @@
         <div class="field"><label>Buoyancy tube volume <span class="unit">m³</span></label><input id="Vtube" type="number" step="0.001" oninput="recalc()"></div>
         <div class="field"><label>N number of compartments</label><input id="N" type="number" step="1" oninput="recalc()"></div>
         <div class="field"><label>L<sub>T</sub> total tube length <span class="unit">m</span></label><input id="LT" type="number" step="0.01" oninput="recalc()"></div>
-        <div class="field"><label>L<sub>STS</sub> sample section length <span class="unit">m (min 0,5)</span></label><input id="LSTS" type="number" step="0.01" value="1.0" oninput="recalc()"></div>
+        <div class="field"><label>L<sub>STS</sub> sample section length <span class="unit">m · you choose, min 0,5</span></label><input id="LSTS" type="number" step="0.01" value="1.0" oninput="recalc()"></div>
         <div class="field"><label>Longest compartment length <span class="unit">m</span></label><input id="Lcomp" type="number" step="0.01" oninput="recalc()"></div>
 
         <div class="subhead">Tube material inputs (type-test)</div>
@@ -248,6 +254,52 @@
         The material-test formulas take d as the maximum tube diameter in millimetres and p as the nominal pressure in bar.
         Tear resistance F<sub>t</sub> takes the greater of the calculated value and the 75 N floor (5.2.2.5); seam strength F<sub>s</sub> is ten times F<sub>t</sub>.
         The attachment-mass formula matches the worked example in 7.14.3 (10 m boat, 10 000 kg, 20 m tube, 1 m sample gives 375 kg).
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DEFINITIONS ============ -->
+  <section class="card">
+    <div class="head" onclick="toggle(this)"><span class="num">REF</span><h2>Symbols &amp; terms — plain-language reference</h2><span class="chev">click to collapse</span></div>
+    <div class="body">
+      <div class="gloss">
+        <div class="sub2">Symbols used in the data fields</div>
+
+        <div class="g"><b>L<sub>H</sub></b> Hull length — length of the rigid hull, measured to ISO 8666 with the tubes at normal pressure. <span class="u">m</span></div>
+        <div class="g"><b>L<sub>max</sub></b> Maximum length — overall length including anything that projects, tubes at normal pressure. <span class="u">m</span></div>
+        <div class="g"><b>B<sub>max</sub></b> Maximum beam — the widest point, tubes at normal pressure. <span class="u">m</span></div>
+        <div class="g"><b>m<sub>LC</sub></b> Light craft mass — the finished boat empty of crew, cargo, fuel and stores (light craft condition, ISO 12217-1). <span class="u">kg</span></div>
+        <div class="g"><b>m<sub>LDC</sub></b> Loaded mass — the boat at its full rated load: crew, stores, fuel, engines, everything (loaded displacement condition, ISO 8666). <span class="u">kg</span></div>
+        <div class="g"><b>m<sub>T</sub></b> Trailer mass — mass of the boat as it sits on a trailer for towing. Used for the lifting-point design load. <span class="u">kg</span></div>
+        <div class="g"><b>P<sub>calc</sub></b> Calculated motor power — the reference maximum engine power for the boat's size, from length, beam and mass. If the fitted power is higher, the manoeuvring-speed test applies. <span class="u">kW</span></div>
+        <div class="g"><b>V</b> Total buoyant volume — the whole volume that keeps the boat afloat: tubes plus any built-in foam, sealed air compartments and buoyant rigid parts. <span class="u">m³</span></div>
+        <div class="g"><b>V<sub>c</sub></b> Compartment volume — the volume of one buoyancy-tube air chamber. <span class="u">m³</span></div>
+        <div class="g"><b>N</b> Number of separate air compartments in the tube. Minimum five.</div>
+        <div class="g"><b>L<sub>T</sub></b> Total tube length — the buoyancy tube on every side of the boat, added together. <span class="u">m</span></div>
+        <div class="g"><b>L<sub>STS</sub></b> Sample tube length — the length of the short off-cut of buoyancy tube used in the attachment strength test. You choose it; minimum 0,5 m. <span class="u">m</span></div>
+        <div class="g"><b>m<sub>t</sub></b> Test weight mass — the weight dropped in the attachment test, worked out from L<sub>STS</sub>, L<sub>T</sub> and m<sub>LDC</sub>. <span class="u">kg</span></div>
+        <div class="g"><b>d</b> Tube diameter — the largest diameter of the buoyancy tube, measured on the straight sections. <span class="u">mm</span></div>
+        <div class="g"><b>p</b> Nominal pressure — the normal working pressure of the tube at 20 °C. <span class="u">bar</span></div>
+        <div class="g"><b>F<sub>t</sub></b> Tear resistance — the minimum tearing force the tube fabric must withstand. <span class="u">N</span></div>
+        <div class="g"><b>F<sub>s</sub></b> Seam strength — the minimum load a tube seam must hold. <span class="u">N</span></div>
+        <div class="g"><b>A<sub>LV</sub></b> Windage area — the side-on area of the hull the wind pushes against, at the loading assessed. Used in the stability check. <span class="u">m²</span></div>
+
+        <div class="sub2">Key terms</div>
+
+        <div class="g"><b>RIB</b> Rigid inflatable boat — a rigid lower hull with a soft buoyancy tube (inflated or foam-filled) along the sides, where the tube gives at least half of the buoyancy the boat needs.</div>
+        <div class="g"><b>Inflatable tube</b> A buoyancy tube split into several separate air chambers, inflated with air, running along both sides.</div>
+        <div class="g"><b>Foam-filled tube</b> A buoyancy tube filled with closed-cell foam instead of air.</div>
+        <div class="g"><b>Crew limit (CL)</b> The largest number of people allowed on board when underway, as shown on the builder's plate.</div>
+        <div class="g"><b>Nominal pressure</b> The correct everyday operating pressure for the tubes at 20 °C.</div>
+        <div class="g"><b>Significant wave height</b> The average height of the highest third of the waves — the standard way sea state is described.</div>
+        <div class="g"><b>Category B — offshore</b> Suited to seas up to 4 m wave height and wind up to Beaufort 8.</div>
+        <div class="g"><b>Category C — inshore</b> Suited to seas up to 2 m and wind up to Beaufort 6.</div>
+        <div class="g"><b>Category D — sheltered</b> Suited to waves up to 0,3 m (occasional 0,5 m) and wind up to Beaufort 4.</div>
+        <div class="g"><b>Type IX</b> RIB with tube covering at least 85% of each side, categories C and D, hull 8–24 m, power 15 kW and greater.</div>
+        <div class="g"><b>Type X</b> RIB with tube covering at least 85% of each side, category B, hull 8–24 m, power 75 kW and greater.</div>
+        <div class="g"><b>Builder's plate</b> The permanent plate on the boat showing category, crew limit, maximum load and tube pressures.</div>
+        <div class="g"><b>WIN</b> Watercraft Identification Number — the boat's unique identifying number.</div>
+        <div class="g"><b>Type test</b> A one-off test on a representative boat or sample that qualifies the model, not repeated on every unit built.</div>
       </div>
     </div>
   </section>

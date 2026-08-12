@@ -197,6 +197,11 @@
           </div>
         </div>
 
+        <div class="warnbox full" id="catBwarn">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L22 21 H2 Z" fill="none" stroke="#c85a00" stroke-width="2" stroke-linejoin="round"/><line x1="12" y1="9" x2="12" y2="15" stroke="#c85a00" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="18" r="1.2" fill="#c85a00"/></svg>
+          <div><strong>Design category B — Notified Body required.</strong> A category B (Type X) craft cannot be assessed by internal production control alone. Under the Recreational Craft Directive 2013/53/EU the stability and design-and-construction assessment must involve a Notified Body. Stability is assessed to the latest ISO 12217-1.</div>
+        </div>
+
         <div class="subhead">Dimensions &amp; masses (per ISO 8666 / ISO 12217-1)</div>
         <div class="field"><label>L<sub>H</sub> hull length <span class="unit">m</span></label><input id="LH" type="number" step="0.01" oninput="recalc()"></div>
         <div class="field"><label>L<sub>max</sub> max length <span class="unit">m</span></label><input id="Lmax" type="number" step="0.01" oninput="recalc()"></div>
@@ -502,11 +507,14 @@ function recalc(){
   if(top!=null){const req=top>=48;manTxt=req?'REQUIRED':'not required';manCls=req?'chk':'ok';}
   badge('b_man',manCls,manTxt); set('t_man',manTxt);
 
-  // stability route
+  // stability route + category B Notified Body warning
+  const cat=document.getElementById('designCat').value;
   let stab = type==='X'
     ? 'Type X: offset load 6.2, resistance to waves/wind 6.3.2 & 6.3.3 (per ISO 12217-1)'
     : 'Type IX: offset load 6.2, heel due to wind 6.4 where A_LV/(L_H·B_H) ≥ 0,5';
+  if(cat==='B') stab += ' — Notified Body assessment required.';
   set('o_stab',stab); set('t_stab',stab);
+  document.getElementById('catBwarn').classList.toggle('show', cat==='B');
 
   // motor power  Pcalc = Lmax × Bmax × cbrt(mLC)
   const Lmax=num('Lmax'), Bmax=num('Bmax'), mLC=num('mLC'), Pf=num('Pfitted'),

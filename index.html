@@ -186,7 +186,7 @@
         <div class="field"><label>Assessment stage</label><select id="stage"><option>Type assessment</option><option>Production / individual</option><option>Post-completion (consoles/seats)</option></select></div>
 
         <div class="subhead">Type &amp; category</div>
-        <div class="field"><label>Boat type</label><select id="boatType" onchange="recalc()"><option value="IX">Type IX (P ≥ 15 kW)</option><option value="X">Type X (P ≥ 75 kW)</option></select></div>
+        <div class="field"><label>Boat type</label><select id="boatType" onchange="syncCategory();recalc()"><option value="IX">Type IX (P ≥ 15 kW)</option><option value="X">Type X (P ≥ 75 kW)</option></select></div>
         <div class="field"><label>Design category</label><select id="designCat" onchange="recalc()"><option value="C">C — inshore (Hs ≤ 2 m, BF ≤ 6)</option><option value="D">D — sheltered (Hs ≤ 0,3 m, BF ≤ 4)</option><option value="B">B — offshore (Hs ≤ 4 m, BF ≤ 8)</option></select></div>
         <div class="field"><label>Drive <span class="unit">(affects 7.2 allowance)</span></label><select id="drive" onchange="recalc()"><option value="prop">Propeller</option><option value="jet">Waterjet (+35% power)</option></select></div>
 
@@ -466,6 +466,18 @@ function fmt(v,d=3){return v==null?'—':Number(v.toFixed(d)).toLocaleString('en
 function set(id,txt){const e=document.getElementById(id);if(e)e.textContent=txt;}
 function badge(id,cls,txt){const e=document.getElementById(id);if(e){e.className='badge '+cls;e.textContent=txt;}}
 
+/* category is paired to boat type: Type IX = C/D, Type X = B */
+function syncCategory(){
+  const t=document.getElementById('boatType').value;
+  const sel=document.getElementById('designCat');
+  const cur=sel.value;
+  const opts = t==='X'
+    ? [['B','B — offshore (Hs ≤ 4 m, BF ≤ 8)']]
+    : [['C','C — inshore (Hs ≤ 2 m, BF ≤ 6)'],['D','D — sheltered (Hs ≤ 0,3 m, BF ≤ 4)']];
+  sel.innerHTML=opts.map(o=>'<option value="'+o[0]+'">'+o[1]+'</option>').join('');
+  sel.value = opts.some(o=>o[0]===cur)?cur:opts[0][0];
+}
+
 function recalc(){
   const mLDC=num('mLDC'), mT=num('mT'), LH=num('LH'), N=num('N'),
         Vtot=num('Vtotal'), Vtube=num('Vtube'), LT=num('LT'), LSTS=num('LSTS'),
@@ -589,6 +601,7 @@ function importState(inp){
 
 /* ---------- init order: load saved data, then fill defaults ---------- */
 loadState();
+syncCategory();
 if(!document.getElementById('assessDate').value)document.getElementById('assessDate').valueAsDate=new Date();
 recalc();
 document.addEventListener('input',saveState);

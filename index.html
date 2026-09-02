@@ -199,7 +199,7 @@
 
         <div class="warnbox full" id="catBwarn">
           <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L22 21 H2 Z" fill="none" stroke="#c85a00" stroke-width="2" stroke-linejoin="round"/><line x1="12" y1="9" x2="12" y2="15" stroke="#c85a00" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="18" r="1.2" fill="#c85a00"/></svg>
-          <div><strong>Design category B — Notified Body required.</strong> A category B (Type X) craft cannot be assessed by internal production control alone. Under the Recreational Craft Directive 2013/53/EU the stability and design-and-construction assessment must involve a Notified Body. Stability is assessed to the latest ISO 12217-1.</div>
+          <div><strong>Design category B — Notified Body required.</strong> Declaring this boat as category B means it cannot be assessed by internal production control alone. Under the Recreational Craft Directive 2013/53/EU the stability and design-and-construction assessment must involve a Notified Body. A Type X hull may instead be declared category C or D, which avoids this. Stability is assessed to the latest ISO 12217-1.</div>
         </div>
 
         <div class="subhead">Dimensions &amp; masses (per ISO 8666 / ISO 12217-1)</div>
@@ -471,10 +471,14 @@ function syncCategory(){
   const t=document.getElementById('boatType').value;
   const sel=document.getElementById('designCat');
   const cur=sel.value;
-  const opts = t==='X'
-    ? [['B','B — offshore (Hs ≤ 4 m, BF ≤ 8)']]
-    : [['C','C — inshore (Hs ≤ 2 m, BF ≤ 6)'],['D','D — sheltered (Hs ≤ 0,3 m, BF ≤ 4)']];
+  // type sets the HIGHEST category; the builder may always declare a lower one.
+  // Type X: ceiling B, may also be C or D.  Type IX: ceiling C, may also be D.
+  const B=['B','B — offshore (Hs ≤ 4 m, BF ≤ 8)'];
+  const C=['C','C — inshore (Hs ≤ 2 m, BF ≤ 6)'];
+  const D=['D','D — sheltered (Hs ≤ 0,3 m, BF ≤ 4)'];
+  const opts = t==='X' ? [B,C,D] : [C,D];
   sel.innerHTML=opts.map(o=>'<option value="'+o[0]+'">'+o[1]+'</option>').join('');
+  // keep current choice if still valid, else default to the ceiling (first option)
   sel.value = opts.some(o=>o[0]===cur)?cur:opts[0][0];
 }
 
